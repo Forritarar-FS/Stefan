@@ -1,0 +1,8 @@
+Vika 1:
+Comment on posts, slugs, forum boards.
+Vika 2:
+User groups, delete post/comments.
+Vika 3:
+Karma system.
+Vika 4:
+Ban Users
