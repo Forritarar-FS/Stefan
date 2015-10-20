@@ -35,7 +35,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="/">Home</a></li>
 					@if (Auth::check())
-						<li><a href="/create">Create Post</a></li>
+						<li><a href="/post/create">Create Post</a></li>
 					@endif
 				</ul>
 

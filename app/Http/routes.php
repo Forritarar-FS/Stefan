@@ -13,13 +13,17 @@
 
 Route::get('/', 'MainController@index');
 Route::get('todo', 'MainController@todo');
-Route::get('create', 'MainController@create');
+Route::get('general', 'MainController@general');
+Route::get('faq', 'MainController@faq');
+Route::get('help', 'MainController@help');
+Route::get('looking-to-play', 'MainController@play');
+/*Route::get('create', 'MainController@create');
 Route::post('', 'MainController@store');
 Route::get('post/{id}', 'MainController@show');
 Route::get('post/{id}/edit', 'MainController@edit');
-Route::patch('post/{id}', 'MainController@update');
+Route::patch('post/{id}', 'MainController@update');*/
 
-//Route::resource('', 'MainController');
+Route::resource('post', 'PostController');
 
 
 Route::controllers([
