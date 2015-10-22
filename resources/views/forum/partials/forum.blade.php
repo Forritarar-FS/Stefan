@@ -5,7 +5,7 @@
       </div>
       <ul class="list-group">
         @foreach ($posts as $post)
-          <a href="{{ url('/post', $post->id) }}" style="text-decoration:none;">
+          <a href="{{ url('/post', $post->slug) }}" style="text-decoration:none;">
               <li class="list-group-item">
                 <h2>{{ $post->title }}</h2>
                 <p>{{ $post->body }}</p>

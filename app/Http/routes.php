@@ -24,6 +24,8 @@ Route::get('post/{id}/edit', 'MainController@edit');
 Route::patch('post/{id}', 'MainController@update');*/
 
 Route::resource('post', 'PostController');
+Route::post('post/{post}', 'PostController@comment');
+
 
 
 Route::controllers([

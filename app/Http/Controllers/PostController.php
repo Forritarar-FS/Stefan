@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Request;
 use App\Http\Requests\PostRequest;
 use App\Posts;
+use App\Comments;
+use Carbon\Carbon;
 use Auth;
 
 class PostController extends Controller {
@@ -13,11 +15,13 @@ class PostController extends Controller {
 		$this->middleware('auth', ['only' => 'create']);
 	}
 
-	public function show($id)
+	public function show($slug)
 	{
-		$post = Posts::findOrFail($id);
+		$post = Posts::whereSlug($slug)->first();
 
-		return view('forum.view', compact('post'));
+		$comments = $post->comments()->orderBy('published_at', 'asc')->get();
+
+		return view('forum.view', compact('post', 'comments'));
 	}
 
 	public function store(PostRequest $request)
@@ -45,10 +49,23 @@ class PostController extends Controller {
 	}
 
 
-		public function create()
-		{
-			return view('forum.create');
-		}
+	public function create()
+	{
+		return view('forum.create');
+	}
+
+	public function comment($post)
+	{
+		$posts = Posts::whereSlug($post)->first();
+
+		$comment = new Comments(Request::all());
+		$comment->published_at = Carbon::now();
+		$comment->user()->associate(Auth::user());
+		$comment->posts()->associate($posts);
+		$comment->save();
+
+		return redirect('post/'. $post);
+	}
 
 
 }
