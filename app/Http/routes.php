@@ -23,6 +23,8 @@ Route::get('post/{id}', 'MainController@show');
 Route::get('post/{id}/edit', 'MainController@edit');
 Route::patch('post/{id}', 'MainController@update');*/
 
+Route::get('admin/dashboard', 'AdminController@dashboard');
+
 Route::resource('post', 'PostController');
 Route::post('post/{post}', 'PostController@comment');
 

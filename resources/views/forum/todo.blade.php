@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<div class="container">
     <ul style="list-style-type: none;">
         <li><input type="checkbox" checked/> User
             <ul style="list-style-type: none;">
@@ -27,4 +27,6 @@
                 <li><input type="checkbox"/> Vote on Comment</li>
             </ul>
         </li>
+    </ul>
+</div>
 @stop
