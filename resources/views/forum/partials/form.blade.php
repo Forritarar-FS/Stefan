@@ -14,11 +14,13 @@
     'help' => 'Help',
     'play' => 'Looking to Play'], null, ['class' => 'form-control']) !!}
 </div>
-@if (Auth::check())
+@if (Auth::user()->group == 'Admin')
 <div class="form-group">
     {!! Form::label('published_at', 'Publish On:') !!}
     {!! Form::input('date', 'published_at', date('Y-m-d'), ['class' => 'form-control']) !!}
 </div>
+@else
+    {!! Form::input('hidden', 'published_at', date('Y-m-d'), ['class' => 'form-control']) !!}
 @endif
 <div class="form-group">
     {!! Form::submit($submitButtonText, ['class' => 'btn btn-primary form-control']) !!}

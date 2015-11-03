@@ -67,5 +67,11 @@ class PostController extends Controller {
 		return redirect('post/'. $post);
 	}
 
+	public function destroy($id)
+	{
+		Posts::whereId($id)->delete();
+		return redirect('');
+	}
+
 
 }

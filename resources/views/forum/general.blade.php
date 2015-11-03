@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
-@include ('forum.partials.forum')
-
+<div class="container">
+  @include ('forum.partials.forum')
+</div>
 @stop
