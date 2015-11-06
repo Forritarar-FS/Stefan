@@ -23,15 +23,12 @@
                 <div class="panel-heading">
                     <h2 class="panel-title">{{ $post->title }}</h2>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" style="word-wrap: break-word;">
                     {{ $post->body }}
                 </div>
-                @if (Auth::user()->group == 'Admin')
                 <div class="panel-footer">
-                    <span class="pull-right">{!! Form::open(['method' => 'DELETE', 'action' => ['PostController@destroy', $post->id]]) !!}{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}{!! Form::close() !!}</span>
-                    <div class="clearfix"></div>
+                    This is a Sample Signature.
                 </div>
-                @endif
             </div>
         </div>
     </div>

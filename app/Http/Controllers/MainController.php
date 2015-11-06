@@ -19,25 +19,25 @@ class MainController extends Controller {
 
 	public function general()
 	{
-		$posts = Posts::latest('published_at')->published()->general()->get();
+		$posts = Posts::latest('published_at')->published()->board('general')->get();
 		return view('forum.general', compact('posts'));
 	}
 
 	public function faq()
 	{
-		$posts = Posts::latest('published_at')->published()->faq()->get();
+		$posts = Posts::latest('published_at')->published()->board('faq')->get();
 		return view('forum.faq', compact('posts'));
 	}
 
 	public function help()
 	{
-		$posts = Posts::latest('published_at')->published()->help()->get();
+		$posts = Posts::latest('published_at')->published()->board('help')->get();
 		return view('forum.help', compact('posts'));
 	}
 
 	public function play()
 	{
-		$posts = Posts::latest('published_at')->published()->play()->get();
+		$posts = Posts::latest('published_at')->published()->board('play')->get();
 		return view('forum.play', compact('posts'));
 	}
 

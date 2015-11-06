@@ -12,7 +12,8 @@
     'general' => 'General',
     'faq' => 'FAQ',
     'help' => 'Help',
-    'play' => 'Looking to Play'], null, ['class' => 'form-control']) !!}
+    'play' => 'Looking to Play'
+    ], null, ['class' => 'form-control']) !!}
 </div>
 @if (Auth::user()->group == 'Admin')
 <div class="form-group">

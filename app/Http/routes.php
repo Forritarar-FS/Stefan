@@ -11,25 +11,28 @@
 |
 */
 
+// Main Routes
 Route::get('/', 'MainController@index');
 Route::get('todo', 'MainController@todo');
 Route::get('general', 'MainController@general');
 Route::get('faq', 'MainController@faq');
 Route::get('help', 'MainController@help');
 Route::get('looking-to-play', 'MainController@play');
-/*Route::get('create', 'MainController@create');
-Route::post('', 'MainController@store');
-Route::get('post/{id}', 'MainController@show');
-Route::get('post/{id}/edit', 'MainController@edit');
-Route::patch('post/{id}', 'MainController@update');*/
 
+// Admin Routes
 Route::get('admin/dashboard', 'AdminController@dashboard');
 
+// User Routes
+Route::get('user/dashboard', 'UserController@dashboard');
+Route::get('user/dashboard/edit', 'UserController@edit');
+
+// Post Routes
 Route::resource('post', 'PostController');
+
+// Comment Routes
 Route::post('post/{post}', 'PostController@comment');
 
-
-
+// Auth Routes
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
