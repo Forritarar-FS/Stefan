@@ -103,3 +103,11 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+.content {
+    display: none;
+    padding : 5px;
+}
+.header {
+  cursor: pointer;
+}

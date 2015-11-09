@@ -33,17 +33,17 @@ class Posts extends Model implements SluggableInterface {
 		$query->where('published_at', '>', Carbon::now());
 	}
 
-	public function scopeGeneral($query)
+	public function scopeBoard($query, $board)
 	{
-		$query->where('board', '=', 'general');
+		$query->where('board', '=', $board);
 	}
 
-	public function scopeFaq($query)
+	public function scopeMain($query)
 	{
-		$query->where('board', '=', 'faq');
+		$query->where('board', '!=', 'faq');
 	}
 
-	public function scopeHelp($query)
+	/*public function scopeHelp($query)
 	{
 		$query->where('board', '=', 'help');
 	}
@@ -51,7 +51,7 @@ class Posts extends Model implements SluggableInterface {
 	public function scopePlay($query)
 	{
 		$query->where('board', '=', 'play');
-	}
+	}*/
 
 	public function setPublishedAtAttribute($date)
 	{
