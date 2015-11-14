@@ -7,10 +7,11 @@
         <div class="col-md-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{ $post->user->name }}</h2>
+                    <h2 class="panel-title">{{ $post->user->name }} <span class="pull-right">{{ $post->user->group }}</span></h2>
                 </div>
                 <div class="panel-body">
-                    {!! Html::image('images/default.jpg', 'Profile Picture', ['class' => 'img-responsive']) !!}
+                    {!! Html::image('profilepics/'. $post->user->profilepic, 'Profile Picture', ['class' => 'img-responsive']) !!}
+
                 </div>
                 <div class="panel-footer">
                     <span class="pull-right">{{ $post->published_at->diffForHumans() }}</span>
@@ -21,13 +22,28 @@
         <div class="col-md-9">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{ $post->title }}</h2>
+                    <h2 class="panel-title">{{ $post->title }}
+                    @if(Auth::check() and Auth::user()->group == 'Admin')
+                          <a href="{{ url('/post/delete', $post->slug) }}"><span class="pull-right glyphicon glyphicon-remove" aria-hidden="true" style="margin:0px;padding:0px;"></a>
+                    @endif
+                    </h2>
                 </div>
                 <div class="panel-body" style="word-wrap: break-word;">
-                    {{ $post->body }}
+                  <div class="row">
+                    <div class="col-md-11">
+                      {!! $post->body !!}
+                    </div>
+                    <div class="col-md-1">
+                      <div class="pull-right">
+                        <a href="{{ url('/post/upvote', $post->slug) }}"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="margin:0px;"></a>
+                          <h3 style="margin:0px;">{{ $postVote }}</h3>
+                        <a href="{{ url('/post/downvote', $post->slug) }}"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="margin:0px;"></a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="panel-footer">
-                    This is a Sample Signature.
+                    {{ $post->user->signature }}
                 </div>
             </div>
         </div>
@@ -41,11 +57,14 @@
             <div class="panel panel-purple">
                 <div class="panel-heading">
                     <h2 class="panel-title">{{ $comment->user->name }}</h2>
+                    <span class="pull-right">{{ $commVote }}</span>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
                     {{ $comment->body }}
                 </div>
                 <div class="panel-footer">
+                    <a href="{{ URL::to('/post/'. $post->slug . '/upvote/' . $comment->id) }}">Upvote</a><a href="{{ URL::to('/post/'. $post->slug . '/downvote/' . $comment->id) }}">Downvote</a>
                     <span class="pull-right">{{ $comment->published_at->diffForHumans() }}</span>
                     <div class="clearfix"></div>
                 </div>

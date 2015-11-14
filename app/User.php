@@ -41,4 +41,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasMany('App\Comments');
 	}
 
+	public function postvotes()
+	{
+		return $this->hasMany('App\PostVotes');
+	}
+
+	public function commentvotes()
+	{
+		return $this->hasMany('App\CommentVotes');
+	}
+
 }

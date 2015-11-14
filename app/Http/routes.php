@@ -21,16 +21,23 @@ Route::get('looking-to-play', 'MainController@play');
 
 // Admin Routes
 Route::get('admin/dashboard', 'AdminController@dashboard');
+Route::get('post/delete/{post}', 'AdminController@destroy');
 
 // User Routes
 Route::get('user/dashboard', 'UserController@dashboard');
 Route::get('user/dashboard/edit', 'UserController@edit');
+Route::post('user/dashboard/edit/profile-pic', 'UserController@picture');
+Route::post('user/dashboard/edit/signature', 'UserController@signature');
 
 // Post Routes
 Route::resource('post', 'PostController');
+Route::get('post/upvote/{post}', 'PostController@upvote');
+Route::get('post/downvote/{post}', 'PostController@downvote');
 
 // Comment Routes
-Route::post('post/{post}', 'PostController@comment');
+Route::post('post/{post}', 'CommentController@comment');
+Route::get('post/{post}/upvote/{comment}', 'CommentController@upvote');
+Route::get('post/{post}/downvote/{comment}', 'CommentController@downvote');
 
 // Auth Routes
 Route::controllers([

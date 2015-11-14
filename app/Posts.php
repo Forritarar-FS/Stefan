@@ -55,7 +55,7 @@ class Posts extends Model implements SluggableInterface {
 
 	public function setPublishedAtAttribute($date)
 	{
-		$this->attributes['published_at'] = Carbon::parse($date);
+		$this->attributes['published_at'] = Carbon::createFromFormat('Y-m-d', $date);
 	}
 
 	public function user()
@@ -66,6 +66,16 @@ class Posts extends Model implements SluggableInterface {
 	public function comments()
 	{
 		return $this->hasMany('App\Comments');
+	}
+
+	public function postvotes()
+	{
+		return $this->hasMany('App\PostVotes');
+	}
+
+	public function commentvotes()
+	{
+		return $this->hasMany('App\CommentVotes');
 	}
 
 }

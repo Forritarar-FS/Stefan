@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->text('board');
 			$table->string('slug')->unique();
+			$table->integer('views')->default(0);
 			$table->timestamps();
 			$table->timestamp('published_at');
 
