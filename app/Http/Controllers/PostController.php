@@ -8,6 +8,8 @@ use App\Posts;
 use App\Comments;
 use Carbon\Carbon;
 use Auth;
+use App\PostVotes;
+use App\CommentVotes;
 
 class PostController extends Controller {
 
@@ -19,9 +21,23 @@ class PostController extends Controller {
 	{
 		$post = Posts::whereSlug($slug)->first();
 
+		$post->views += 1;
+		$post->save();
+
+		$postUpvote = $post->postvotes()->whereVote("up")->count();
+		$postDownvote = $post->postvotes()->whereVote("down")->count();
+
+		$postVote = $postUpvote - $postDownvote;
+
+		$commUpvote = $post->commentvotes()->whereVote("up")->count();
+		$commDownvote = $post->commentvotes()->whereVote("down")->count();
+
+		$commVote = $commUpvote - $commDownvote;
+
+
 		$comments = $post->comments()->orderBy('published_at', 'asc')->get();
 
-		return view('forum.view', compact('post', 'comments'));
+		return view('forum.view', compact('post', 'comments', 'postVote', 'commVote'));
 	}
 
 	public function store(PostRequest $request)
@@ -54,23 +70,46 @@ class PostController extends Controller {
 		return view('forum.create');
 	}
 
-	public function comment($post)
+	public function upvote($post)
 	{
 		$posts = Posts::whereSlug($post)->first();
 
-		$comment = new Comments(Request::all());
-		$comment->published_at = Carbon::now();
-		$comment->user()->associate(Auth::user());
-		$comment->posts()->associate($posts);
-		$comment->save();
+		$existing_vote = PostVotes::wherePostsId($posts->id)->whereUserId(Auth::id())->first();
 
-		return redirect('post/'. $post);
+		if(!is_null($existing_vote)) {
+			$existing_vote->vote = "up";
+			$existing_vote->save();
+			return redirect('post/' . $posts->slug);
+		} else {
+			$vote = new PostVotes();
+			$vote->user()->associate(Auth::user());
+			$vote->posts()->associate($posts);
+			$vote->vote = "up";
+			$vote->save();
+
+			return redirect('post/' . $posts->slug);
+		}
 	}
 
-	public function destroy($id)
+	public function downvote($post)
 	{
-		Posts::whereId($id)->delete();
-		return redirect('');
+		$posts = Posts::whereSlug($post)->first();
+
+		$existing_vote = PostVotes::wherePostsId($posts->id)->whereUserId(Auth::id())->first();
+
+		if(!is_null($existing_vote)) {
+			$existing_vote->vote = "down";
+			$existing_vote->save();
+			return redirect('post/' . $posts->slug);
+		} else {
+			$vote = new PostVotes();
+			$vote->user()->associate(Auth::user());
+			$vote->posts()->associate($posts);
+			$vote->vote = "down";
+			$vote->save();
+
+			return redirect('post/' . $posts->slug);
+		}
 	}
 
 

@@ -137,6 +137,8 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
 		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
+		'Golonka\BBCode\BBCodeParserServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -196,6 +198,8 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
+		'Image' => 'Intervention\Image\Facades\Image',
+		'BBCode' => 'Golonka\BBCode\Facades\BBCodeParser',
 
 	],
 

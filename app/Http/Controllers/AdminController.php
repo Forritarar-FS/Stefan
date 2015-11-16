@@ -20,4 +20,10 @@ class AdminController extends Controller {
 		return view('admin.dashboard', compact('posts'));
 	}
 
+	public function destroy($post)
+	{
+		Posts::whereSlug($post)->delete();
+		return redirect('');
+	}
+
 }
