@@ -24,5 +24,5 @@
     {!! Form::input('hidden', 'published_at', date('Y-m-d'), ['class' => 'form-control']) !!}
 @endif
 <div class="form-group">
-    {!! Form::submit($submitButtonText, ['class' => 'btn btn-primary form-control']) !!}
+    {!! Form::submit($submitButtonText, ['class' => 'btn btn-primary form-control', 'onclick' => 'submitForm(this)']) !!}
 </div>
