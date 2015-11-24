@@ -24,10 +24,12 @@ Route::get('admin/dashboard', 'AdminController@dashboard');
 Route::get('post/delete/{post}', 'AdminController@destroy');
 
 // User Routes
-Route::get('user/dashboard', 'UserController@dashboard');
-Route::get('user/dashboard/edit', 'UserController@edit');
-Route::post('user/dashboard/edit/profile-pic', 'UserController@picture');
-Route::post('user/dashboard/edit/signature', 'UserController@signature');
+Route::get('user/{user}', 'UserController@profile');
+Route::get('user/{user}/posts', 'UserController@userPosts');
+Route::get('user/{user}/comments', 'UserController@userComments');
+Route::get('user/{user}/edit', 'UserController@userEdit');	
+Route::post('user/{user}/edit/profile-pic', 'UserController@picture');
+Route::post('user/{user}/edit/signature', 'UserController@signature');
 
 // Post Routes
 Route::resource('post', 'PostController');

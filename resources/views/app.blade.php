@@ -51,7 +51,7 @@
 								@if (Auth::user()->group == 'Admin')
 									<li><a href="/admin/dashboard">Admin Dashboard</a></li>
 								@endif
-								<li><a href="/user/dashboard">User Dashboard</a></li>
+								<li><a href="{{ URL::to('user/' . Auth::user()->name) }}">User Dashboard</a></li>
 								<li><a href="/auth/logout">Logout</a></li>
 							</ul>
 						</li>
@@ -66,5 +66,13 @@
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script>
+    function submitForm(btn) {
+        // disable the button
+        btn.disabled = true;
+        // submit the form
+        btn.form.submit();
+    }
+	</script>
 </body>
 </html>

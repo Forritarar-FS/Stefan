@@ -43,7 +43,7 @@
                   </div>
                 </div>
                 <div class="panel-footer">
-                    {{ $post->user->signature }}
+                    {!! $post->user->signature !!}
                 </div>
             </div>
         </div>
@@ -54,21 +54,27 @@
   @if($comments)
     <div class="well">
         @foreach($comments as $comment)
+        <div class="col-md-11">
             <div class="panel panel-purple">
                 <div class="panel-heading">
                     <h2 class="panel-title">{{ $comment->user->name }}</h2>
-                    <span class="pull-right">{{ $commVote }}</span>
-                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
                     {{ $comment->body }}
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ URL::to('/post/'. $post->slug . '/upvote/' . $comment->id) }}">Upvote</a><a href="{{ URL::to('/post/'. $post->slug . '/downvote/' . $comment->id) }}">Downvote</a>
                     <span class="pull-right">{{ $comment->published_at->diffForHumans() }}</span>
                     <div class="clearfix"></div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-1">
+            <a href="{{ URL::to('/post/'. $post->slug . '/upvote/' . $comment->id) }}"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="margin:0px;"></a>
+              <h3 style="margin:0px;">{{ $commVote }}</h3>
+            <a href="{{ URL::to('/post/'. $post->slug . '/downvote/' . $comment->id) }}"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="margin:0px;"></a>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
         @endforeach
     </div>
   @endif
@@ -87,11 +93,40 @@
                       {!! Form::textarea('body', null, ['class' => 'form-control']) !!}
                   </div>
                   <div class="form-group">
-                      {!! Form::submit('Comment', ['class' => 'btn btn-primary form-control']) !!}
+                      {!! Form::submit('Comment', ['class' => 'btn btn-primary form-control', 'id' => 'submitButton', 'onclick' => 'submitForm(this)']) !!}
                   </div>
               {!! Form::close() !!}
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#advEditor" style="display: block; width: 100%;">
+                  Advanced Editor
+              </button>
           </div>
       </div>
+      <div class="modal fade bs-example-modal-lg" id="advEditor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Advanced Editor</h4>
+              </div>
+              <div class="modal-body">
+                  {!! Form::open() !!}
+                      <div class="form-group">
+                          {!! Form::label('body', 'Comment:') !!}
+                          {!! Form::textarea('body', null, ['class' => 'form-control', 'id' => 'editor1']) !!}
+                      </div>
+                      <div class="modal-footer">
+                      <div class="form-group">
+                          {!! Form::submit('Comment', ['class' => 'btn btn-primary form-control', 'id' => 'submitButton']) !!}
+                      </div>
+                      </div>
+                  {!! Form::close() !!}
+              </div>
+            </div>
+          </div>
+        </div>
+      <script>
+      CKEDITOR.replace('editor1');
+      </script>
   @endif
 </div>
 

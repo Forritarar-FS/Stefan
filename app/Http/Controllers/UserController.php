@@ -3,26 +3,18 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
+use App\User;
 
 use Request;
 use Image;
 use Input;
 use File;
+use Redirect;
 
 class UserController extends Controller {
 
 	function __construct() {
-		$this->middleware('auth');
-	}
-
-	public function dashboard()
-	{
-		return view('user.dashboard');
-	}
-
-	public function edit()
-	{
-		return view('user.edit');
+		$this->middleware('auth', ['except' => ['profile', 'userPosts', 'userComments']]);
 	}
 
 	public function picture()
@@ -64,4 +56,39 @@ class UserController extends Controller {
 		return view('user.edit');
 	}
 
+	public function profile($user)
+	{
+		$user = User::whereName($user)->firstOrFail();
+
+		return view('user.profile.index', compact('user'));
+	}
+
+	public function userPosts($user)
+	{
+		$user = User::whereName($user)->firstOrFail();
+		$posts = $user->posts;
+
+		return view('user.profile.posts', compact('user', 'posts'));
+	}
+
+	public function userComments($user)
+	{
+		$user = User::whereName($user)->firstOrFail();
+		$comments = $user->comments;
+
+		return view('user.profile.comments', compact('user', 'comments'));
+	}
+
+	public function userEdit($user)
+	{
+		$user = User::whereName($user)->firstOrFail();
+
+		if($user->name == Auth::user()->name) {
+			return view('user.profile.edit', compact('user'));
+		}
+
+		return Redirect::to('user/' . $user->name)->with('message','You cannot edit someone elses profile.');
+
+
+	}
 }
