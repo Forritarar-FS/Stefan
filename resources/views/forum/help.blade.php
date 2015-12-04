@@ -2,6 +2,6 @@
 
 @section('content')
 <div class="container">
-  @include ('forum.partials.forum', ['board' => 'Help'])
+    @include ('forum.partials.forum', ['board' => 'Help'])
 </div>
 @stop

@@ -14,8 +14,8 @@
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 	<script src="/ckeditor/ckeditor.js"></script>
 </head>
@@ -36,25 +36,25 @@
 				<ul class="nav navbar-nav">
 					<li><a href="/">Home</a></li>
 					@if (Auth::check())
-						<li><a href="/post/create">Create Post</a></li>
+					<li><a href="/post/create">Create Post</a></li>
 					@endif
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
-						<li><a href="/auth/login">Login</a></li>
-						<li><a href="/auth/register">Register</a></li>
+					<li><a href="/auth/login">Login</a></li>
+					<li><a href="/auth/register">Register</a></li>
 					@else
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								@if (Auth::user()->group == 'Admin')
-									<li><a href="/admin/dashboard">Admin Dashboard</a></li>
-								@endif
-								<li><a href="{{ URL::to('user/' . Auth::user()->name) }}">User Dashboard</a></li>
-								<li><a href="/auth/logout">Logout</a></li>
-							</ul>
-						</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							@if (Auth::user()->group == 'Admin')
+							<li><a href="/admin/dashboard">Admin Dashboard</a></li>
+							@endif
+							<li><a href="{{ URL::to('user/' . Auth::user()->name) }}">User Dashboard</a></li>
+							<li><a href="/auth/logout">Logout</a></li>
+						</ul>
+					</li>
 					@endif
 				</ul>
 			</div>
@@ -67,12 +67,22 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script>
-    function submitForm(btn) {
-        // disable the button
-        btn.disabled = true;
-        // submit the form
-        btn.form.submit();
-    }
+	function submitForm(btn) {
+		// disable the button
+		btn.disabled = true;
+		// submit the form
+		btn.form.submit();
+	}
+	$('#editComment').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget) // Button that triggered the modal
+	  var recipient = button.data('comment') // Extract info from data-* attributes
+		var url = button.data('url')
+	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+	  var modal = $(this)
+		modal.find('.modal-body form').attr('action', url)
+	  modal.find('.modal-body textarea').val(recipient)
+	})
 	</script>
 </body>
 </html>

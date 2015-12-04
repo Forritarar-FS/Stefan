@@ -9,8 +9,13 @@ use App\CommentVotes;
 use Request;
 use Carbon\Carbon;
 use Auth;
+use Redirect;
 
 class CommentController extends Controller {
+
+	function __construct() {
+		$this->middleware('auth', ['only' => ['upvote', 'downvote']]);
+	}
 
 	public function comment($post)
 	{
@@ -35,6 +40,15 @@ class CommentController extends Controller {
 		if(!is_null($existing_vote)) {
 			$existing_vote->vote = "up";
 			$existing_vote->save();
+
+			$commUpvote = $post->commentvotes()->whereVote("up")->count();
+			$commDownvote = $post->commentvotes()->whereVote("down")->count();
+
+			$commVote = $commUpvote - $commDownvote;
+
+			$comments->votes = $commVote;
+			$comments->save();
+
 			return redirect('post/' . $posts->slug);
 		} else {
 			$vote = new CommentVotes();
@@ -43,6 +57,9 @@ class CommentController extends Controller {
 			$vote->comments()->associate($comments);
 			$vote->vote = "up";
 			$vote->save();
+
+			$comments->votes += 1;
+			$comments->save();
 
 			return redirect('post/' . $posts->slug);
 		}
@@ -58,6 +75,15 @@ class CommentController extends Controller {
 		if(!is_null($existing_vote)) {
 			$existing_vote->vote = "down";
 			$existing_vote->save();
+
+			$commUpvote = $post->commentvotes()->whereVote("up")->count();
+			$commDownvote = $post->commentvotes()->whereVote("down")->count();
+
+			$commVote = $commUpvote - $commDownvote;
+
+			$comments->votes = $commVote;
+			$comments->save();
+
 			return redirect('post/' . $posts->slug);
 		} else {
 			$vote = new PostVotes();
@@ -67,8 +93,28 @@ class CommentController extends Controller {
 			$vote->vote = "down";
 			$vote->save();
 
+			$comments->votes -= 1;
+			$comments->save();
+
 			return redirect('post/' . $posts->slug);
 		}
+	}
+
+	public function destroy($post, $comment)
+	{
+		Comments::whereId($comment)->delete();
+		return Redirect::Back();
+	}
+
+	public function update($post, $comment)
+	{
+		$comment = Comments::whereId($comment)->firstOrFail();
+
+		$input = Request::all();
+
+		$comment->update($input);
+
+		return Redirect::Back();
 	}
 
 }

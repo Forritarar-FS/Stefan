@@ -5014,6 +5014,12 @@ a.list-group-item-danger.active:focus {
 .panel-title > a {
   color: inherit;
 }
+.panel-title > div > a {
+  color: inherit;
+}
+.panel-title > div > a:hover {
+  color: #115188;
+}
 .panel-footer {
   padding: 10px 15px;
   background-color: #f5f5f5;

@@ -16,7 +16,7 @@ class MainController extends Controller {
 	{
 		return view('forum.todo');
 	}
-
+	
 	public function general()
 	{
 		$posts = Posts::latest('published_at')->published()->board('general')->get();

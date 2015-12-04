@@ -23,10 +23,10 @@ class UserController extends Controller {
 		{
 			$user = Auth::user();
 
-		    $image = Input::file('image');
-		    $filename  = Auth::user()->name . '.' . $image->getClientOriginalExtension();
+			$image = Input::file('image');
+			$filename  = Auth::user()->name . '.' . $image->getClientOriginalExtension();
 
-		    $path = public_path('profilepics/' . $filename);
+			$path = public_path('profilepics/' . $filename);
 
 			if (File::exists($filename)) {
 				File::delete($filename);
@@ -37,7 +37,7 @@ class UserController extends Controller {
 			$user->profilepic = $filename;
 			$user->save();
 
-			return view('user.edit');
+			return view('user.profile.index', compact('user'));
 		}
 
 		return ('Didnt work');
@@ -53,7 +53,7 @@ class UserController extends Controller {
 		$user->signature = $signature;
 		$user->save();
 
-		return view('user.edit');
+		return view('user.profile.index', compact('user'));
 	}
 
 	public function profile($user)
