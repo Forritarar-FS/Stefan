@@ -22,7 +22,7 @@ class PostRequest extends Request {
 	public function rules()
 	{
 		return [
-			'title' => 'required|min:5',
+			'title' => 'required|min:5|max:20',
 			'body' => 'required|min:10',
 			'published_at' => 'required|date'
 		];

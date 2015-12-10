@@ -19,7 +19,8 @@ class CreateUsersTable extends Migration {
 			$table->string('email')->unique();
 			$table->string('password', 60);
 			$table->string('group');
-			$table->string('signature')->default('I do not have any signature!');
+			$table->integer('votes')->default(0);
+			$table->string('signature', 5000)->default('I do not have any signature!');
 			$table->string('profilepic')->default('default.jpg');
 			$table->rememberToken();
 			$table->timestamps();

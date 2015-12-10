@@ -38,21 +38,6 @@ class Posts extends Model implements SluggableInterface {
 		$query->where('board', '=', $board);
 	}
 
-	public function scopeMain($query)
-	{
-		$query->where('board', '!=', 'faq');
-	}
-
-	/*public function scopeHelp($query)
-	{
-		$query->where('board', '=', 'help');
-	}
-
-	public function scopePlay($query)
-	{
-		$query->where('board', '=', 'play');
-	}*/
-
 	public function setPublishedAtAttribute($date)
 	{
 		$this->attributes['published_at'] = Carbon::createFromFormat('Y-m-d', $date);

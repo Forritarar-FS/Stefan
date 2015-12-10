@@ -18,6 +18,7 @@ class CreateCommentTable extends Migration {
 			$table->text('body');
 			$table->integer('posts_id')->unsigned();
 			$table->integer('user_id')->unsigned();
+			$table->integer('votes')->default(0);
 			$table->timestamps();
 			$table->timestamp('published_at');
 

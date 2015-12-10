@@ -10,11 +10,12 @@ use Carbon\Carbon;
 use Auth;
 use App\PostVotes;
 use App\CommentVotes;
+use App\User;
 
 class PostController extends Controller {
 
 	function __construct() {
-		$this->middleware('auth', ['only' => 'create']);
+		$this->middleware('auth', ['only' => ['create', 'upvote', 'downvote']]);
 	}
 
 	public function show($slug)
@@ -24,20 +25,9 @@ class PostController extends Controller {
 		$post->views += 1;
 		$post->save();
 
-		$postUpvote = $post->postvotes()->whereVote("up")->count();
-		$postDownvote = $post->postvotes()->whereVote("down")->count();
-
-		$postVote = $postUpvote - $postDownvote;
-
-		$commUpvote = $post->commentvotes()->whereVote("up")->count();
-		$commDownvote = $post->commentvotes()->whereVote("down")->count();
-
-		$commVote = $commUpvote - $commDownvote;
-
-
 		$comments = $post->comments()->orderBy('published_at', 'asc')->get();
 
-		return view('forum.view', compact('post', 'comments', 'postVote', 'commVote'));
+		return view('forum.view', compact('post', 'comments'));
 	}
 
 	public function store(PostRequest $request)
@@ -49,18 +39,18 @@ class PostController extends Controller {
 		return redirect('');
 	}
 
-	public function update($id, PostRequest $request)
+	public function update($post, PostRequest $request)
 	{
-		$post = Posts::findOrFail($id);
+		$post = Posts::whereSlug($post)->firstOrFail();
 
 		$post->update($request->all());
 
-		return redirect('');
+		return redirect('post/' . $post->slug);
 	}
 
-	public function edit($id)
+	public function edit($post)
 	{
-		$post = Posts::findOrFail($id);
+		$post = Posts::whereSlug($post)->firstOrFail();
 		return view('forum.edit', compact('post'));
 	}
 
@@ -72,13 +62,30 @@ class PostController extends Controller {
 
 	public function upvote($post)
 	{
-		$posts = Posts::whereSlug($post)->first();
+		$posts = Posts::whereSlug($post)->firstOrFail();
+		$user = $posts->user()->first();
 
 		$existing_vote = PostVotes::wherePostsId($posts->id)->whereUserId(Auth::id())->first();
 
 		if(!is_null($existing_vote)) {
 			$existing_vote->vote = "up";
 			$existing_vote->save();
+
+			$userUpvote = $posts->postvotes()->where('user_id', $user->id)->where('vote', 'up')->count();
+			$userDownvote = $posts->postvotes()->where('user_id', $user->id)->where('vote', 'down')->count();
+
+			$userVote = $userUpvote - $userDownvote;
+
+			$postUpvote = $posts->postvotes()->whereVote("up")->count();
+			$postDownvote = $posts->postvotes()->whereVote("down")->count();
+
+			$postVote = $postUpvote - $postDownvote;
+
+			$posts->votes = $postVote;
+			$posts->save();
+			$user->votes = $userVote;
+			$user->save();
+
 			return redirect('post/' . $posts->slug);
 		} else {
 			$vote = new PostVotes();
@@ -87,19 +94,41 @@ class PostController extends Controller {
 			$vote->vote = "up";
 			$vote->save();
 
+			$posts->votes += 1;
+			$posts->save();
+			$user->votes += 1;
+			$user->save();
+
 			return redirect('post/' . $posts->slug);
 		}
 	}
 
 	public function downvote($post)
 	{
-		$posts = Posts::whereSlug($post)->first();
+		$posts = Posts::whereSlug($post)->firstOrFail();
+		$user = $posts->user()->first	();
 
 		$existing_vote = PostVotes::wherePostsId($posts->id)->whereUserId(Auth::id())->first();
 
 		if(!is_null($existing_vote)) {
 			$existing_vote->vote = "down";
 			$existing_vote->save();
+
+			$userUpvote = $posts->postvotes()->where('user_id', $user->id)->where('vote', 'up')->count();
+			$userDownvote = $posts->postvotes()->where('user_id', $user->id)->where('vote', 'down')->count();
+
+			$userVote = $userUpvote - $userDownvote;
+
+			$postUpvote = $posts->postvotes()->whereVote("up")->count();
+			$postDownvote = $posts->postvotes()->whereVote("down")->count();
+
+			$postVote = $postUpvote - $postDownvote;
+
+			$posts->votes = $postVote;
+			$posts->save();
+			$user->votes = $userVote;
+			$user->save();
+
 			return redirect('post/' . $posts->slug);
 		} else {
 			$vote = new PostVotes();
@@ -108,9 +137,19 @@ class PostController extends Controller {
 			$vote->vote = "down";
 			$vote->save();
 
+			$posts->votes -= 1;
+			$user->votes -= 1;
+			$posts->save();
+			$user->save();
+
 			return redirect('post/' . $posts->slug);
 		}
 	}
 
+	public function destroy($post)
+	{
+		Posts::whereSlug($post)->delete();
+		return redirect('');
+	}
 
 }
